@@ -376,6 +376,12 @@ def test_surt_return_type(burl):
     u = surt.surt(uurl)
     assert type(u) is type(uurl)
 
+def test_unescape_encoding():
+    # percent encoding, utf-8 encoded characters
+    assert surt.surt("http://example.com/city-of-M%C3%BCnchen.html") == 'com,example)/city-of-m%c3%bcnchen.html'
+    # percent encoding, latin-1 encoded characters (pre-RFC3986)
+    assert surt.surt("http://example.com/city-of-M%FCnchen.html") == 'com,example)/city-of-m%fcnchen.html'
+
 def test_options():
     assert surt.IAURLCanonicalizer.canonicalize(handyurl.parse('http://example.com/foo?X=Y')).getURLString() == 'http://example.com/foo?x=y'
     assert surt.IAURLCanonicalizer.canonicalize(handyurl.parse('http://example.com/foo?X=Y'), query_lowercase=False).getURLString() == 'http://example.com/foo?X=Y'
